@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.dataverse-container {
+  margin: 100px;
+}
+
+.dataverse-response {
+  margin-top: 20px;
+}
