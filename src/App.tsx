@@ -42,14 +42,14 @@ class App extends React.Component<{}, AppState> {
     return <div style={{padding: 30}}>
       <h1>Datasets section</h1>
       <div className={'dataverse-container'}>
-        <Button onClick={() => this.getDatasetVersionInfo()}>Get Dataset information</Button>
+        <Button onClick={() => this.getDatasetInfo()}>Get Dataset information</Button>
         <div className={'dataverse-response'}>{JSON.stringify(this.state.data)}</div>
       </div>
     </div>
   }
 
-  private async getDatasetVersionInfo() {
-    const response = await DatasetService.getDatasetVersionInfo()
+  private async getDatasetInfo() {
+    const response = await DatasetService.getDatasetInfo("6")
     this.setState({
       data: response
     })
