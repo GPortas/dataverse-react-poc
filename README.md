@@ -1,70 +1,58 @@
-# Getting Started with Create React App
+# dataverse-react-poc
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+dataverse-react-poc is a PoC of how a new front-end application decoupled from the Dataverse application can interact with Dataverse through the Native API, coexisting with the JSF Dataverse front-end.
 
-In the project directory, you can run:
+In particular, this PoC focuses on testing the following points:
 
-### `npm start`
+- New API auth mechanism using JSESSIONID cookie for new front-end requests to the Native API
+- URL routing of both new and old front-ends coexisting, with specific URLs for the new front-end
+- New front-end mavenization and application building through a .war file, following the Dataverse model
+- Deployment of the new front-end application on the same Payara server as Dataverse
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Requirements
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Dataverse local instance
 
-### `npm test`
+It is necessary to locally deploy Dataverse with this branch: https://github.com/GPortas/dataverse/tree/session_api_auth
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+That branch has the JSESSIONID cookie Native API auth implemented, necessary for this PoC.
 
-### `npm run build`
+### Node and Yarn
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+For the development of the React application you will need to have Node 14.0.0 or later version on your local development machine.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Using Homebrew, you can upgrade your node version by running the following command:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+````
+brew upgrade node
+````
 
-### `npm run eject`
+Make sure you have Yarn installed, as it is the package manager used in this project.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+You can install Yarn by running the following command:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+````
+brew install corepack
+````
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Building the application
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This project is mavenized, so to build the application and produce a .war file, simply run the following command:
 
-## Learn More
+````
+mvn package
+````
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The generated .war file can be found inside the /target folder in the repository.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Deploying the application
 
-### Code Splitting
+Once we have the application .war file, we can deploy it to Payara using asadmin in a similar way to Dataverse:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+````
+asadmin deploy --contextroot new react-poc.war
+````
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Context root identifies the origin of the base path of the new application's URLs, so that there is no conflict with the existing deployed Dataverse application URLs.
