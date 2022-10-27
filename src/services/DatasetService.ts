@@ -1,9 +1,9 @@
 import axios, { AxiosResponse, ResponseType } from 'axios'
 
 export class DatasetService {
-    public static async getDatasetInfo(datasetId: string) : Promise<AxiosResponse> {
+    public static async getDatasetInfo(datasetId: string, csrfToken: string) : Promise<AxiosResponse> {
       const url = `http://localhost:8080/api/datasets/${datasetId}`
-      return await axios.get(url, {}).catch(error => {
+      return await axios.get(url, {headers: {'X-CSRF-Token': csrfToken}}).catch(error => {
         return(error.response.status, error.response.data.message)
       })
     }
