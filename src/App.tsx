@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { DatasetService } from './services/DatasetService'
 import { LoginService } from './services/LoginService'
 import { Button } from 'react-bootstrap'
+import { useAuth } from 'react-oauth2-pkce'
 
 import './App.css';
 
@@ -31,6 +32,7 @@ class App extends React.Component<{}, AppState> {
       <BrowserRouter>
       <Routes>
         <Route path='/new/login' element={<this.LoginPage />} />
+        <Route path='/new/login-oidc' element={<LoginOidcPage />} />
         <Route path='/new/' element={<this.HomePage />} />
         <Route path='/new/datasets' element={<this.DatasetsPage />} />
       </Routes>
@@ -72,6 +74,7 @@ class App extends React.Component<{}, AppState> {
     return <div style={{padding: 30}}>
       <h1>React Application POC</h1>
       <p><Link to="/new/login" reloadDocument={true}>Go to login section</Link></p>
+      <p><Link to="/new/login-oidc">Go to login OIDC section</Link></p>
       <p><Link to="/dataverseuser.xhtml" reloadDocument={true}>Go to dataverse user page</Link></p>
       <p><Link to="/new/datasets">Go to datasets section</Link></p>
     </div>
@@ -116,6 +119,20 @@ class App extends React.Component<{}, AppState> {
       })
     }
   }
+}
+
+export const LoginOidcPage = () => {
+  const { authService } = useAuth();
+
+  const login = async () => {
+    authService.authorize()
+  }
+  
+  return (
+    <div>
+      <button onClick={login}>Login</button>
+    </div>
+  )
 }
 
 export default App
