@@ -6,12 +6,12 @@ import './App.css';
 
 const authService = new AuthService({
   clientId: 'oidc-client',
-  authorizeEndpoint: 'http://localhost:8090/auth/realms/oidc-realm/protocol/openid-connect/auth',
-  tokenEndpoint: 'http://localhost:8090/auth/realms/oidc-realm/protocol/openid-connect/token',
-  logoutEndpoint: 'http://localhost:8090/auth/realms/oidc-realm/protocol/openid-connect/logout',
-  redirectUri: 'http://localhost/new',
+  authorizeEndpoint: 'https://localhost/auth/realms/oidc-realm/protocol/openid-connect/auth',
+  tokenEndpoint: 'https://localhost/auth/realms/oidc-realm/protocol/openid-connect/token',
+  logoutEndpoint: 'https://localhost/auth/realms/oidc-realm/protocol/openid-connect/logout',
+  redirectUri: 'http://localhost:8080/new',
   location: window.location,
-  provider: 'http://localhost:8090/auth/realms/oidc-realm/protocol/openid-connect/auth',
+  provider: 'https://localhost/auth/realms/oidc-realm/protocol/openid-connect/auth',
   scopes: ['openid']
 });
 
