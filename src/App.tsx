@@ -4,6 +4,7 @@ import { DatasetService } from './services/DatasetService'
 import { LoginService } from './services/LoginService'
 import { Button } from 'react-bootstrap'
 import { useAuth } from 'react-oauth2-pkce'
+import { useState, useEffect } from 'react';
 
 import './App.css';
 
@@ -122,15 +123,37 @@ class App extends React.Component<{}, AppState> {
 }
 
 export const LoginOidcPage = () => {
-  const { authService } = useAuth();
+  const { authService } = useAuth()
+  const [isLoggedIn, setLogin] = useState()
+
+  useEffect(() => {
+    if (localStorage.getItem("auth") !== null) {
+      setLogin(true)
+    } else {
+      setLogin(false)
+    }
+  }, [isLoggedIn])
+
 
   const login = async () => {
     authService.authorize()
   }
-  
-  return (
-    <div>
-      <button onClick={login}>Login</button>
+
+  const logout = async () => {
+    authService.logout()
+  }
+
+  return (<div className="App">
+      {!isLoggedIn ? (
+        <div>
+          <button onClick={login}>Login</button>
+        </div>
+      ) : (
+        <div>
+          <p>{localStorage.getItem("auth")}</p>
+          <button onClick={logout}>Logout</button>
+        </div>
+      )}
     </div>
   )
 }
